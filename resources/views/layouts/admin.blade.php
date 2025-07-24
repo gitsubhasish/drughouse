@@ -71,6 +71,20 @@
             </a>
         </li>
 
+        <li class="nav-item {{ Nav::isRoute('admin.units.index') }}">
+            <a class="nav-link" href="{{ route('admin.units.index') }}">
+                <i class="fas fa-fw fa-hands-helping"></i>
+                <span>{{ __('Units') }}</span>
+            </a>
+        </li>
+
+        <li class="nav-item {{ Nav::isRoute('admin.pincodes.index') }}">
+            <a class="nav-link" href="{{ route('admin.pincodes.index') }}">
+                <i class="fas fa-fw fa-hands-helping"></i>
+                <span>{{ __('Pincode') }}</span>
+            </a>
+        </li>
+
         <!-- Nav Item - About -->
         <li class="nav-item {{ Nav::isRoute('admin.medicines.index') }}">
             <a class="nav-link" href="{{ route('admin.medicines.index') }}">

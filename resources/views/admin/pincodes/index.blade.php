@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('content')
+@section('main-content')
 <div class="container-fluid">
     <h1 class="h3 mb-4 text-gray-800">Pincodes</h1>
 

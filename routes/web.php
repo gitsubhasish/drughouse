@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ManufacturerController;
 use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\PincodeController;
+use App\Http\Controllers\Admin\UnitController;
 
 /*
 |--------------------------------------------------------------------------
