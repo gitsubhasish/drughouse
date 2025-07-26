@@ -40,7 +40,9 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
-        session()->flash('success', 'You are logged in!');
-        return $this->redirectTo;
+        if (auth()->user()->is_admin) {
+            return route('admin.dashboard');
+        }
+        return route('home');
     }
 }

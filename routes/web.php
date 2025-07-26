@@ -8,56 +8,59 @@ use App\Http\Controllers\Admin\MedicineController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PincodeController;
 use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
+// ✅ Default Landing Page (Frontend Home)
 Route::get('/', function () {
-    return redirect()->route('login');
-});
+    return view('frontend.home');
+})->name('home');
 
+// ✅ Authentication Routes
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// ✅ Profile for Logged-in Users
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
 
-Route::get('/profile', 'ProfileController@index')->name('profile');
-Route::put('/profile', 'ProfileController@update')->name('profile.update');
+// ✅ After Login, Redirect Based on Role
+Route::get('/redirect-after-login', function () {
+    if (auth()->check() && auth()->user()->is_admin) {
+        return redirect()->route('admin.dashboard');
+    }
+    return redirect()->route('home');
+})->name('redirect.after.login');
 
-Route::get('/about', function () {
-    return view('about');
-})->name('about');
-
-
-
-
-Route::middleware(['auth', 'is_admin']) // create is_admin middleware
+// ✅ Admin Panel Routes
+Route::middleware(['auth', 'is_admin']) // make sure you have created is_admin middleware
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
 
-    Route::resource('categories', CategoryController::class);
-    Route::resource('manufacturers', ManufacturerController::class);
-    Route::resource('medicines', MedicineController::class);
-    Route::resource('orders', OrderController::class);
-    Route::resource('units', UnitController::class);
-    Route::resource('pincodes', PincodeController::class);
+        Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
-    // Extra routes
-    Route::post('medicines/import', [MedicineController::class, 'import'])
-        ->name('medicines.import');
+        Route::resource('categories', CategoryController::class);
+        Route::resource('manufacturers', ManufacturerController::class);
+        Route::resource('medicines', MedicineController::class);
+        Route::resource('orders', OrderController::class);
+        Route::resource('units', UnitController::class);
+        Route::resource('pincodes', PincodeController::class);
 
-    Route::post('orders/{order}/status', [OrderController::class, 'updateStatus'])
-        ->name('orders.updateStatus');
+        // Extra routes
+        Route::post('medicines/import', [MedicineController::class, 'import'])
+            ->name('medicines.import');
 
-    Route::get('orders/{order}/invoice', [OrderController::class, 'invoice'])
-        ->name('orders.invoice');
-});
+        Route::post('orders/{order}/status', [OrderController::class, 'updateStatus'])
+            ->name('orders.updateStatus');
 
+        Route::get('orders/{order}/invoice', [OrderController::class, 'invoice'])
+            ->name('orders.invoice');
+    });
