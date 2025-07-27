@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="fonts/icomoon/style.css">
+  <link rel="stylesheet" href="{{ asset('pharmative/fonts/icomoon/style.css') }}">
 
   <link rel="stylesheet" href="{{ asset('pharmative/css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ asset('pharmative/fonts/flaticon/font/flaticon.css') }}">
@@ -20,11 +20,16 @@
   <link rel="stylesheet" href="{{ asset('pharmative/css/aos.css') }}">
 
   <link rel="stylesheet" href="{{ asset('pharmative/css/style.css') }}">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
 </head>
 
 <body>
-
+  @if(session('success'))
+  <div class="alert alert-success text-center">
+      {{ session('success') }}
+  </div>
+  @endif
   <div class="site-wrap">
 
 
@@ -146,6 +151,9 @@
     @include('frontend.partials.footer')
     <!-- Footer End -->
 
+    
+
+
   </div>
 
   <script src="{{ asset('pharmative/js/jquery-3.3.1.min.js') }}"></script>
@@ -157,6 +165,30 @@
   <script src="{{ asset('pharmative/js/aos.js') }}"></script>
 
   <script src="{{ asset('pharmative/js/main.js') }}"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+  <script>
+  $(function() {
+      let minPrice = {{ request('min_price', 0) }};
+      let maxPrice = {{ request('max_price', 500) }};
+
+      $("#slider-range").slider({
+          range: true,
+          min: 0,
+          max: 500, // You can set dynamically from DB later
+          values: [minPrice, maxPrice],
+          slide: function(event, ui) {
+              $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+              $("#min_price").val(ui.values[0]);
+              $("#max_price").val(ui.values[1]);
+          }
+      });
+
+      // Initial display
+      $("#amount").val("$" + $("#slider-range").slider("values", 0) +
+          " - $" + $("#slider-range").slider("values", 1));
+  });
+  </script>
 
 </body>
 

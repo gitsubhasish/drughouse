@@ -45,4 +45,13 @@ class LoginController extends Controller
         }
         return route('home');
     }
+
+    protected function authenticated($request, $user)
+    {
+        if ($user->is_admin) { // if user is admin
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect('/'); // normal users go to frontend home page
+    }
 }

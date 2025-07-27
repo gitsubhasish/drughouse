@@ -9,7 +9,12 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PincodeController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Frontend\ShopController;
+use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\Frontend\CheckoutController;
+use App\Http\Controllers\Frontend\InvoiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,11 +22,18 @@ use App\Http\Controllers\ProfileController;
 |--------------------------------------------------------------------------
 */
 
-// ✅ Default Landing Page (Frontend Home)
-Route::get('/', function () {
-    return view('frontend.home');
-})->name('home');
 
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/shop', [ShopController::class, 'index'])->name('shop');
+Route::get('/product/{medicine}', [ShopController::class, 'show'])->name('product.show');
+
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add/{medicine}', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
+Route::get('/invoice/{order}', [InvoiceController::class, 'download'])->name('invoice.download');
 // ✅ Authentication Routes
 Auth::routes();
 
@@ -45,7 +57,7 @@ Route::middleware(['auth', 'is_admin']) // make sure you have created is_admin m
     ->name('admin.')
     ->group(function () {
 
-        Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
 
         Route::resource('categories', CategoryController::class);
         Route::resource('manufacturers', ManufacturerController::class);

@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Category;
-use App\Models\Medicine;
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class AdminController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -16,7 +15,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     /**
@@ -27,7 +26,6 @@ class HomeController extends Controller
     public function index()
     {
         $categories = Category::all();
-        $medicines = Medicine::where('is_featured', 1)->get();
-        return view('frontend.home', compact('categories', 'medicines'));
+        return view('home', compact('categories'));
     }
 }

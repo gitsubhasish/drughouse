@@ -25,6 +25,9 @@
                 <th>#</th>
                 <th>User</th>
                 <th>Total</th>
+                <th>Customer Name</th>
+                <th>Customer Email</th>
+                <th>Customer Phone</th>
                 <th>Status</th>
                 <th>Date</th>
                 <th>Actions</th>
@@ -36,6 +39,9 @@
                 <td>{{ $order->id }}</td>
                 <td>{{ $order->user->name ?? 'Guest' }}</td>
                 <td>{{ $order->total_amount }}</td>
+                <td>{{ $order->customer_name ?? "" }}</td>
+                <td>{{ $order->customer_email ?? "" }}</td>
+                <td>{{ $order->customer_phone ?? "" }}</td>
                 <td>
                     @if($order->status == 'pending')
                         <span class="badge badge-warning">Pending</span>
