@@ -15,6 +15,11 @@ use App\Http\Controllers\Frontend\ShopController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\InvoiceController;
+use App\Exports\MedicineTemplateExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\FrontendAuthController;
+use App\Http\Controllers\FrontendAccountController;
+use App\Http\Controllers\AccountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +39,25 @@ Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.r
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
 Route::get('/invoice/{order}', [InvoiceController::class, 'download'])->name('invoice.download');
+
+
+// Custom Frontend Login/Register Routes
+Route::get('/frontend-login', [FrontendAuthController::class, 'showLogin'])->name('frontend-login');
+Route::post('/frontend-login', [FrontendAuthController::class, 'login'])->name('frontend.login.submit');
+Route::get('/frontend-register', [FrontendAuthController::class, 'showRegister'])->name('frontend.register');
+Route::post('/frontend-register', [FrontendAuthController::class, 'register'])->name('frontend.register.submit');
+Route::post('/frontend-logout', [FrontendAuthController::class, 'logout'])->name('frontend.logout');
+Route::get('/my-account', [FrontendAccountController::class, 'index'])->name('frontend.my-account')->middleware('frontend.auth');
+
+Route::middleware(['frontend.auth'])->post('/my-account/address', [AccountController::class, 'updateAddress'])->name('account.address');
+Route::middleware(['frontend.auth'])->post('/my-account/password-reset', [AccountController::class, 'sendResetLink'])->name('account.reset');
+
+// Checkout page (requires login)
+Route::get('/checkout', [CheckoutController::class, 'index'])->middleware('frontend.auth')->name('checkout');
+
+
+
+
 // ✅ Authentication Routes
 Auth::routes();
 
@@ -75,4 +99,9 @@ Route::middleware(['auth', 'is_admin']) // make sure you have created is_admin m
 
         Route::get('orders/{order}/invoice', [OrderController::class, 'invoice'])
             ->name('orders.invoice');
+
+
+        Route::get('/medicines/template/download', function () {
+            return Excel::download(new MedicineTemplateExport, 'medicine-upload-template.xlsx');
+        })->name('medicines.template.download');
     });

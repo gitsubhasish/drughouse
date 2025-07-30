@@ -43,6 +43,24 @@
             <a href="#" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span
                 class="icon-menu"></span></a>
           </div>
+          @if(Auth::check())
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                    <img src="{{ Auth::user()->avatar_url ?? asset('default-avatar.png') }}" alt="Avatar" class="rounded-circle" width="32" height="32">
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ route('frontend.my-account') }}">My Account</a></li>
+                    <li>
+                        <form action="{{ route('frontend.logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="dropdown-item">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        @else
+            <a href="{{ route('frontend-login') }}">Login</a>
+        @endif
         </div>
       </div>
     </div>

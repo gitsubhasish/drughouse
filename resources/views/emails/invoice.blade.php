@@ -55,7 +55,7 @@
             <tbody>
                 @php $total_price = 0; @endphp
                 @foreach($order->items as $index => $item)
-                @php $total_price+=$item->price; @endphp
+                @php $total_price+=$item->price*$item->quantity; @endphp
                 <tr>
                     <td class="center">{{ $index + 1 }}</td>
                     <td>{{ $item->medicine->name }}</td>

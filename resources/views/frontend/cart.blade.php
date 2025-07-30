@@ -64,7 +64,7 @@
             </div>
             <div class="col-md-6 text-right">
                 <h3>Total: ${{ number_format($total, 2) }}</h3>
-                <a href="{{ route('checkout.index') }}" class="btn btn-primary btn-md btn-block">Proceed To Checkout</a>
+                <a href="{{ route('checkout') }}" class="btn btn-primary btn-md btn-block">Proceed To Checkout</a>
             </div>
         </div>
         @else

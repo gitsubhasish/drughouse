@@ -21,6 +21,7 @@
 
   <link rel="stylesheet" href="{{ asset('pharmative/css/style.css') }}">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <!-- Bootstrap CSS -->
 
 </head>
 
@@ -166,7 +167,7 @@
 
   <script src="{{ asset('pharmative/js/main.js') }}"></script>
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
   <script>
   $(function() {
       let minPrice = {{ request('min_price', 0) }};

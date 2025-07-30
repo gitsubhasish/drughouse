@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Manufacturer;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
 
 class ManufacturerSeeder extends Seeder
 {
@@ -22,8 +23,8 @@ class ManufacturerSeeder extends Seeder
             $imageUrl = 'https://picsum.photos/seed/' . Str::slug($man['name']) . '/600/400';
 
             if (!Storage::disk('public')->exists($imageName)) {
-                $imageData = file_get_contents($imageUrl);
-                Storage::disk('public')->put($imageName, $imageData);
+                $response = Http::withoutVerifying()->get($imageUrl); // disables SSL verification
+                Storage::disk('public')->put($imageName, $response->body());
             }
 
             Manufacturer::create([

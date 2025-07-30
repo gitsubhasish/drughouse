@@ -11,6 +11,7 @@ use App\Models\Unit;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class MedicineSeeder extends Seeder
 {
@@ -42,8 +43,8 @@ class MedicineSeeder extends Seeder
                 $imageUrl = 'https://picsum.photos/seed/' . Str::slug($medicine->name) . '-' . $j . '/600/400';
 
                 if (!Storage::disk('public')->exists($imageName)) {
-                    $imageData = file_get_contents($imageUrl);
-                    Storage::disk('public')->put($imageName, $imageData);
+                    $response = Http::withoutVerifying()->get($imageUrl); // disables SSL verification
+                    Storage::disk('public')->put($imageName, $response->body());
                 }
 
                 MedicineImage::create([
